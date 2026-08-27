@@ -1,0 +1,13 @@
+{
+  "mod_id": "metal_quintessence",
+  "version": "0.1.0",
+  "mod_page_url": " ",
+  "dll": "bin/MetalQuintessence.dll",
+  "authors": [],
+  "icon": "textures/icons/MetalQuintessence",
+  "mappings": "",
+  "dependencies": {
+    "quintessential_core": "[0.5.6,0.6)"
+  },
+  "conflicts": []
+}
