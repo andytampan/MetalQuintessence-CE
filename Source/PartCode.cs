@@ -153,10 +153,8 @@ namespace MetalQuintessence
                             bool requirement = true; //assume requirement is true, then
                             foreach (var atom in metals.Zip(inputs, (a, r) => new { type = a, reference = r })) //this iterate each atomtype and reference as one.
                             {
-                                if (!metals.Contains(atom.type)) { requirement = false; break; }
-                                ; //iterate if each metal is contained in the inputlist
-                                if (atom.reference.inMultiAtomMolecule && atom.reference.isHeldByArm) { requirement = false; break; }
-                                ; //iterate if each atom are singular and dropped
+                                if (!metals.Contains(atom.type)) { requirement = false; break; }; //iterate if each metal is contained in the inputlist
+                                if (atom.reference.inMultiAtomMolecule || atom.reference.isHeldByArm) { requirement = false; break; }; //iterate if each atom are singular and dropped
                             }
                             if (quicksilver == AtomTypes.quicksilver && requirement) // if requirement is still true, and if the input are quicksilver
                             {
@@ -164,11 +162,11 @@ namespace MetalQuintessence
                                 // playSound(sim, MetalQuintessenceSound.pigmentationSound);
                                 foreach (AtomReference atom in inputs) //remove each atom one by one
                                 {
-
+                                    seb.consumptionEffects.Add(new ConsumptionEffect(seb, atom));
                                     atom.molecule.RemoveAtom(atom.pos);
-                                    seb.consumptionEffects.Add(new ConsumptionEffect(seb, atom.molecule));
+                                    
                                 }
-                                silver.molecule.ReplaceAtom(quicksilver, silver.pos);  //transume quicksilver into chromium with it's effect
+                                silver.molecule.ReplaceAtom(Atom.Chromium, silver.pos);  //transume quicksilver into chromium with it's effect
                                 silver.atom.transmutationEffect = new TransmutationEffect(seb, TransmutationEffectRenderMode.AsEffect, silver.atomType, Assets.textures.atoms.projection_effect, 7.5f, 7);
 
                             }
