@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static class_103;
+using static Quintessential.Serialization.PuzzleModel;
 
 namespace MetalQuintessence
 {
@@ -58,9 +59,6 @@ namespace MetalQuintessence
         {
             Pigmentation = new()
             {
-                id = MetalQuintessence.Instance.ModId +"metalquintessence-pigmentation", 
-                name = Translations.Translate("Glyph of Pigmentation"), 
-                description = Translations.Translate("The glyph of pigmentation transmutes each grade of metallic atom into a single chromium atom"), 
                 cost = 30, // Cost
                 isFullHexCover = true, // Is a glyph
                 baseTexture = pigmentationIcon, // Panel icon
@@ -77,15 +75,16 @@ namespace MetalQuintessence
                 pigmentationC,
                 pigmentationD,
                 pigmentationE,
-                pigmentationF
+                pigmentationF,
+                
 
             },
                 permissionCategory = PuzzlePermissions.None,
-                CustomPermissionCheck = perms => perms.Contains(MetalQuintessence.PigmentationPermission)
+                CustomPermissionCheck = perms => perms.Contains(MetalQuintessence.Instance.GetIdentifier("pigmentation"))
             };
             QApi.AddPartTypeToPanel(Pigmentation, false);
 
-            QApi.AddPartType(Pigmentation, static (part, pos, editor, renderer) =>
+            MetalQuintessence.Instance.AddPartType(Pigmentation, "pigmentation", static (part, pos, editor, renderer) =>
             {
                 // Vector2 offset = new(41f, 48f);
                 Vector2 offset = new(130f, 200f);
@@ -113,9 +112,6 @@ namespace MetalQuintessence
 
             ChromeDispersion = new()
             {
-                id = "metalquintessence-chromedispersion", // ID
-                name = Translations.Translate("Glyph of Chromatic Dispersion"), // Name
-                description = Translations.Translate("The glyph of chromatic dispersion disperse chromium into all of the metal grade"), // Description
                 cost = 30, // Cost
                 isFullHexCover = true, // Is a glyph
                 glowTexture= chromaticDispersionGlow, // Shadow/glow
@@ -125,6 +121,7 @@ namespace MetalQuintessence
                 glyphHexes = new HexIndex[]
             {
                 chromeDispersionInput,
+                chromeDispersionQuicksilver,
                 chromeDispersionLead,
                 chromeDispersionTin,
                 chromeDispersionIron,
@@ -136,10 +133,10 @@ namespace MetalQuintessence
 
             },
                 permissionCategory = PuzzlePermissions.None,
-                CustomPermissionCheck = perms => perms.Contains(MetalQuintessence.ChromeDispersionPermission)
+                CustomPermissionCheck = perms => perms.Contains(MetalQuintessence.Instance.GetIdentifier("chromedispersion"))
 
             };
-            QApi.AddPartType(ChromeDispersion, static (part, pos, editor, renderer) =>
+             MetalQuintessence.Instance.AddPartType(ChromeDispersion, "chromedispersion", static (part, pos, editor, renderer) =>
             {
                 Vector2 offset = new(90f, 296f);
 
@@ -301,6 +298,74 @@ namespace MetalQuintessence
                             }
                         }
                     }
+                    if (partType == ChromeDispersion)
+                    {
+                        HexIndex[] outputHexes = new HexIndex[7]
+                        {
+                   chromeDispersionLead,
+                   chromeDispersionTin,
+                   chromeDispersionIron,
+                   chromeDispersionCopper,
+                   chromeDispersionSilver,
+                   chromeDispersionGold,
+                   chromeDispersionQuicksilver
+                        };
+
+                        if (first && !simStates[part].isProcessing)
+                        {
+                            if (sim.FindAtomRelative(part, chromeDispersionInput).GetOrDefault(out AtomReference chromium) && !chromium.inMultiAtomMolecule && !chromium.isHeldByArm && chromium.atomType == Atom.Chromium)
+                            {
+                                // playSound(sim, MetalQuintessenceSound.chromatic_dispersionSound);
+                                bool blocked = false; //
+                                foreach (HexIndex h in outputHexes)
+                                {
+
+                                    if (sim.FindAtomRelative(part, h).HasValue())
+                                    {
+                                        blocked = true;
+                                        break;
+                                    }
+                                }
+                                if (!blocked)
+                                {
+                                    chromium.molecule.RemoveAtom(chromium.pos);
+                                    seb.consumptionEffects.Add(new ConsumptionEffect(seb, chromium));
+                                    simStates[part].isProcessing = true;
+                                    foreach (HexIndex h in outputHexes)
+                                    {
+                                        
+                                        sim.additionalCollisions.Add(new Sim.Collider
+                                        {
+                                            type = 0,
+                                            center = HexGrid.standardGrid.ToPixelCoords(part.InFrontBy(h)),
+                                            radius = 15f
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        else if (simStates[part].isProcessing)
+                        {
+                            AtomType[] cardinalAtoms = new AtomType[7]
+                            {
+                        AtomTypes.lead,
+                        AtomTypes.tin,
+                        AtomTypes.iron,
+                        AtomTypes.copper,
+                        AtomTypes.silver,
+                        AtomTypes.gold,
+                        AtomTypes.quicksilver
+                            };
+
+                            for (int i = 0; i < 7; i++)
+                            {
+                                Molecule molecule = new Molecule();
+                                molecule.AddAtom(new global::Atom(cardinalAtoms[i]), part.InFrontBy(outputHexes[i]));
+                                sim.molecules.Add(molecule);
+                            }
+                        }
+                    }
+
                 }
             });
         }

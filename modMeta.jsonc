@@ -7,7 +7,7 @@
   "icon": "textures/icons/MetalQuintessence",
   "mappings": "",
   "dependencies": {
-    "quintessential_core": "[0.5.6,0.6)"
+    "quintessential_core": "0.6.2"
   },
   "conflicts": []
 }

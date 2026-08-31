@@ -21,7 +21,7 @@ namespace MetalQuintessence
                 defaultName = Translations.Translate(MetalQuintessence.Instance.ModId + ".atom.chromium"),
                 elementalName = Translations.Translate(MetalQuintessence.Instance.ModId + ".atom.chromium.elemental"),
                 symbol = AssetLoaderHelper.LoadTexture("textures/atoms/andytampan/metalquintessence/chromium_symbol"),
-                shadow = AssetLoaderHelper.LoadTexture("textures/atoms/andytampan/metalquintessence/mors_shade"),
+                shadow = Assets.textures.atoms.shadow,
 
 
                 matteTextures = new()
@@ -31,8 +31,8 @@ namespace MetalQuintessence
                 },
                 isQuicksilver = true
             };
+            MetalQuintessence.Instance.AddAtomType(Chromium, "chromium");
 
-            QApi.AddAtomType(Chromium);
         }
     }
 }

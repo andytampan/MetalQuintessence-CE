@@ -19,15 +19,15 @@ public class MetalQuintessence : QuintessentialMod
 
     }
 
-    public const string PigmentationPermission = "MetalQuintessence:Pigmentation";
-    public const string ChromeDispersionPermission = "MetalQuintessence:ChromaDispersionPermission";
+    public const string PigmentationPermission = "pigmentation";
+    public const string ChromeDispersionPermission = "chromedispersion";
 
-    public override void LoadPuzzleContent() 
+    public override void LoadContent() 
     {
         Logger.Log("Metal Quintessence - Implementing sanity check");
         Atom.AddAtom();
-        QApi.AddPuzzlePermission(PigmentationPermission, "Glyph of Pigmentation", "MetalQuintessence");
-        QApi.AddPuzzlePermission(ChromeDispersionPermission, "Glyph of Chrome Dispersion", "MetalQuintessence");
+        Instance.AddPuzzlePermission(PigmentationPermission);
+        Instance.AddPuzzlePermission(ChromeDispersionPermission);
         PartCode.AddPartsType();
 
         
@@ -36,5 +36,15 @@ public class MetalQuintessence : QuintessentialMod
     public override void Unload()
     {
         // Blank
+    }
+
+    public override void LoadCompatContent()
+    {
+
+    }
+
+    public override void FinaliseContent()
+    {
+
     }
 }

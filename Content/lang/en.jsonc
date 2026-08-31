@@ -1,41 +1,27 @@
 {
-  "metalquintessence": {
+  "metal_quintessence": {
     "": "Metal Quintessence",
-    "description": "Introduces the unstable elements Aether and Uranium, and the glyphs that act on them.",
+    "description": "Introduces chromium, a metallic analog of quintessence",
     "atoms": {
-      "aether": {
-        "": "Aether",
-        "elemental": "Elemental Aether"
-      },
-      "uranium": {
-        "": "Uranium",
-        "elemental": "Elemental Uranium"
+      "chromium": {
+        "": "Chromium",
+        "elemental": "Elemental Chromium"
       }
     },
     "parts": {
-      "irradiation": {
-        "": "Glyph of Irradiation",
-        "description": "The glyph of irradiation projects an atom of gold into an unstable atom of uranium."
+      "pigmentation": {
+        "": "Glyph of Chrome Dispersion",
+        "description": "The glyph of pigmentation transmutes each grade of metallic atom into a single chromium atom"
       },
-      "volatility": {
-        "": "Glyph of Volatility",
-        "description": "The glyph of volatility causes an atom of uranium to instantly decay, regardless of its heat."
-      },
-      "tranquility": {
-        "": "Glyph of Tranquility",
-        "description": "The glyph of tranquility projects a field that stabilizes uranium and aether atoms, preventing their decays."
-      },
-      "sublimation": {
-        "": "Glyph of Sublimation",
-        "description": "The glyph of sublimation splits an atom of quintessence into two molecules of stabilized aether."
+      "chromedispersion": {
+        "": "Glyph of Chrome Dispersion",
+        "description": "The glyph of chromatic dispersion disperse chromium into all of the metal grade"
       }
     },
-    "permission_sections": "Unstable Elements",
+    "permission_sections": "Metal Quintessence",
     "permissions": {
-      "irradiation": "Glyph of Irradiation",
-      "volatility": "Glyph of Volatility",
-      "tranquility": "Glyph of Tranquility",
-      "sublimation": "Glyph of Sublimation"
+      "pigmentation": "Glyph of Pigmentation",
+      "chromedispersion": "Glyph of Chrome Dispersion"
     }
   }
 }
