@@ -20,6 +20,17 @@ namespace MetalQuintessence
         public static Texture pigmentationIcon = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/icons/pigmentation");
         public static Texture pigmentationIconHover = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/icons/pigmentation_hover");
 
+        public static Texture chromaticDispersionBase = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/chromaticDispersionBase/pigmentationBase");
+        public static Texture chromaticDispersionGlyphBase = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/chromaticDispersionBase/glyphBase");
+        public static Texture chromaticDispersionIcon = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/icons/chromaDispersion");
+        public static Texture chromaticDispersionIconHover = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/icons/chromaDispersion_hover");
+        public static Texture chromaticDispersionGlow = AssetLoaderHelper.LoadTexture("textures/select/andytampan/chromaDispersion_glow");
+        public static Texture chromaticDispersionStroke = AssetLoaderHelper.LoadTexture("textures/select/andytampan/chromaDispersion_stroke");
+        public static Texture chromaticDispersionBond = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/chromaticDispersionBase/chromaDispersionBondLoop");
+
+        public static Texture[] irisAnimation = Assets.textures.parts.iris_full;
+        public static Texture chromiumIcon = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/pigmentation/chromiumIcon");
+
         public static readonly HexIndex pigmentationBowl = new(0, 0);
         public static readonly HexIndex pigmentationA = new(-1, 0);
         public static readonly HexIndex pigmentationB = new(0, -1);
@@ -27,14 +38,27 @@ namespace MetalQuintessence
         public static readonly HexIndex pigmentationD = new(2, -2);
         public static readonly HexIndex pigmentationE = new(1, -1);
         public static readonly HexIndex pigmentationF = new(1, 0);
+
+        public static readonly HexIndex chromeDispersionInput = new(0, 0);
+        public static readonly HexIndex chromeDispersionLead = new(1, 0);
+        public static readonly HexIndex chromeDispersionTin = new(2, -1);
+        public static readonly HexIndex chromeDispersionIron = new(3, -2);
+        public static readonly HexIndex chromeDispersionCopper = new(3, -3);
+        public static readonly HexIndex chromeDispersionSilver = new(2, -3);
+        public static readonly HexIndex chromeDispersionGold = new(1, -2);
+        public static readonly HexIndex chromeDispersionQuicksilver = new(0, -1);
+        public static readonly HexIndex chromeDispersionGlyphA = new(1, -1);
+        public static readonly HexIndex chromeDispersionGlyphB = new(2, -2);
         public static PartType Pigmentation;
+
+        public static PartType ChromeDispersion;
 
 
         public static void AddPartsType()
         {
             Pigmentation = new()
             {
-                id = "metalquintessence-pigmentation", 
+                id = MetalQuintessence.Instance.ModId +"metalquintessence-pigmentation", 
                 name = Translations.Translate("Glyph of Pigmentation"), 
                 description = Translations.Translate("The glyph of pigmentation transmutes each grade of metallic atom into a single chromium atom"), 
                 cost = 30, // Cost
@@ -87,7 +111,112 @@ namespace MetalQuintessence
                 renderer.RenderUpright(quicksilverIcon, pigmentationBowl, Vector2.Zero);
             });
 
+            ChromeDispersion = new()
+            {
+                id = "metalquintessence-chromedispersion", // ID
+                name = Translations.Translate("Glyph of Chromatic Dispersion"), // Name
+                description = Translations.Translate("The glyph of chromatic dispersion disperse chromium into all of the metal grade"), // Description
+                cost = 30, // Cost
+                isFullHexCover = true, // Is a glyph
+                glowTexture= chromaticDispersionGlow, // Shadow/glow
+                strokeTexture = chromaticDispersionStroke, // Stroke/outline
+                baseTexture = chromaticDispersionIcon, // Panel icon
+                hoverTexture = chromaticDispersionIconHover, // Hovered panel icon
+                glyphHexes = new HexIndex[]
+            {
+                chromeDispersionInput,
+                chromeDispersionLead,
+                chromeDispersionTin,
+                chromeDispersionIron,
+                chromeDispersionCopper,
+                chromeDispersionSilver,
+                chromeDispersionGold,
+                chromeDispersionGlyphA,
+                chromeDispersionGlyphB
 
+            },
+                permissionCategory = PuzzlePermissions.None,
+                CustomPermissionCheck = perms => perms.Contains(MetalQuintessence.ChromeDispersionPermission)
+
+            };
+            QApi.AddPartType(ChromeDispersion, static (part, pos, editor, renderer) =>
+            {
+                Vector2 offset = new(90f, 296f);
+
+
+                renderer.RenderUpright(chromaticDispersionGlyphBase, chromeDispersionGlyphA, Vector2.Zero);
+                renderer.RenderUpright(chromaticDispersionGlyphBase, chromeDispersionGlyphB, Vector2.Zero);
+                renderer.RenderBase(chromaticDispersionBase, Vector2.Zero, offset, 0f);
+                renderer.RenderUpright(ringhole, chromeDispersionInput, Vector2.Zero);
+
+                int irisFrame = 15;
+                bool afterIrisOpens = false;
+                PartSimState pss = editor.GetSimulation().GetSimState(part);
+                IntermediatePartState uco = editor.GetIntermState(part, pos);
+                float time = editor.GetCycleTime();
+                AtomType[] cardinalAtoms = new AtomType[7]
+                {
+                AtomTypes.lead,
+                AtomTypes.tin,
+                AtomTypes.iron,
+                AtomTypes.copper,
+                AtomTypes.silver,
+                AtomTypes.gold,
+                AtomTypes.quicksilver
+                };
+
+                HexIndex[] outputHexes = new HexIndex[7]
+                {
+                chromeDispersionLead,
+                chromeDispersionTin,
+                chromeDispersionIron,
+                chromeDispersionCopper,
+                chromeDispersionSilver,
+                chromeDispersionGold,
+                chromeDispersionQuicksilver
+                };
+
+
+
+                if (pss.isProcessing)
+                {
+                    irisFrame = Utils.Clamp((int)(Utils.InterpolateLinear(1f, -1f, time) * 16f), 0, 15);
+                    afterIrisOpens = time > 0.5f;
+                }
+
+                for (int i = 0; i < 7; i++)
+                {
+                    HexIndex h = outputHexes[i];
+                    Vector2 risingOffset = uco.pos + HexGrid.standardGrid.ToPixelCoords(h).Rotated(uco.rotation);
+                    Molecule risingAtom = Molecule.CreateMonoatomic(cardinalAtoms[i]);
+
+                    renderer.RenderRotating(ringhole, h, Vector2.Zero);
+                    if (pss.isProcessing && !afterIrisOpens)
+                    {
+                        // show atom rising behind iris
+                        Editor.RenderMolecule(risingAtom, risingOffset, new HexIndex(0, 0), 0f, 1f, time, 1f, false, null);
+                    }
+                    renderer.RenderUpright(irisAnimation[irisFrame], h, Vector2.Zero);
+                    if (pss.isProcessing && afterIrisOpens)
+                    {
+                        // show atom rising infront of iris
+                        Editor.RenderMolecule(risingAtom, risingOffset, new HexIndex(0, 0), 0f, 1f, time, 1f, false, null);
+                    }
+                }
+                // 90f, 296f ????????????????? I end up just eyeballing this
+                renderer.RenderBase(chromaticDispersionBond, Vector2.Zero, offset, 0f);
+                Vector2 offsetRotate0 = new(48f, 366f); // -48 and +70
+                renderer.RenderBase(chromaticDispersionBond, Vector2.Zero, offsetRotate0, 0f);
+                Vector2 offsetRotate1 = new(172f, 296f); // +82 and 0
+                renderer.RenderBase(chromaticDispersionBond, Vector2.Zero, offsetRotate1, Convert.ToSingle(Math.PI / 3));
+                Vector2 offsetRotate2 = new(214f, 366); // -42 and +70
+                renderer.RenderBase(chromaticDispersionBond, Vector2.Zero, offsetRotate2, Convert.ToSingle(Math.PI / 3));
+                Vector2 offsetRotate3 = new(294f, 225);
+                renderer.RenderBase(chromaticDispersionBond, Vector2.Zero, offsetRotate3, Convert.ToSingle(Math.PI / 3 * 2));
+                renderer.RenderUpright(chromiumIcon, chromeDispersionInput, Vector2.Zero);
+            });
+
+            QApi.AddPartTypeToPanel(ChromeDispersion, false);
             QApi.RunAfterCycle((sim, first)
             =>
             {
@@ -163,7 +292,7 @@ namespace MetalQuintessence
                                 foreach (AtomReference atom in inputs) //remove each atom one by one
                                 {
                                     seb.consumptionEffects.Add(new ConsumptionEffect(seb, atom));
-                                    atom.molecule.RemoveAtom(atom.pos);
+                                    atom.molecule.RemoveAtom(atom.pos); 
                                     
                                 }
                                 silver.molecule.ReplaceAtom(Atom.Chromium, silver.pos);  //transume quicksilver into chromium with it's effect

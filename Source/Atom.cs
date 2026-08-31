@@ -17,9 +17,9 @@ namespace MetalQuintessence
             Chromium = new AtomType()
             {
                 byteId = 25,
-                QuintAtomType = "metalquintessence-chromium",
-                defaultName = Translations.WithAllLanguages("Chromium"),
-                elementalName = Translations.Translate("Chromium"),
+                QuintAtomType = MetalQuintessence.Instance.ModId + ":chromium",
+                defaultName = Translations.Translate(MetalQuintessence.Instance.ModId + ".atom.chromium"),
+                elementalName = Translations.Translate(MetalQuintessence.Instance.ModId + ".atom.chromium.elemental"),
                 symbol = AssetLoaderHelper.LoadTexture("textures/atoms/andytampan/metalquintessence/chromium_symbol"),
                 shadow = AssetLoaderHelper.LoadTexture("textures/atoms/andytampan/metalquintessence/mors_shade"),
 
