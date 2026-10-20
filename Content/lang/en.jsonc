@@ -1,0 +1,17 @@
+{
+  "metalquintessence": {
+    "": "Metal Quintessence",
+    "description": "This mod add an atom calle Chromium",
+    "atoms": {
+      "chromium": {
+        "": "Chromium",
+        "elemental": "Elemental Chromium"
+      }
+    },
+    "permission_sections": "Metal Quintessence",
+    "permissions": {
+      "ChromeDispersion": "Glyph of Dispersion",
+      "Chromification": "Glyph Of Chromification"
+    }
+  }
+}

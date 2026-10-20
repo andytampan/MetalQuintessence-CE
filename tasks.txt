@@ -1,0 +1,6 @@
+* newMod -name "metalquintessence"
+* copy -toMod "metalquintessence" -from "D:\star\OPUS MAGNUM\metalquintessence\modMeta.jsonc"
+* copy -toMod "metalquintessence" -from "D:\star\OPUS MAGNUM\metalquintessence\bin\Debug\net10.0\metalquintessence.dll"
+* copy -toMod "metalquintessence" -from "D:\star\OPUS MAGNUM\metalquintessence\bin\Debug\net10.0\metalquintessence.pdb"
+* copy -toMod "metalquintessence" -from "D:\star\OPUS MAGNUM\metalquintessence\bin\Debug\net10.0\metalquintessence.xml"
+* copy -toMod "metalquintessence" -from "D:\star\OPUS MAGNUM\metalquintessence\Content"
