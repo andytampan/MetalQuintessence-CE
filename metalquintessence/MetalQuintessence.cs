@@ -1,4 +1,7 @@
 ﻿using Quintessential;
+using System;
+using Quintessential.Settings;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MetalQuintessence;
 
@@ -10,6 +13,8 @@ internal class MetalQuintessence : QuintessentialMod, IDataMod {
 
     public static string ChromeDispersionPermission = "ChromeDispersion";
     public static string ChromificationPermission = "Chromification";
+
+    public static string BlossomPermission = "Blossom";
 
     public static AtomType Chromium;
 
@@ -31,13 +36,19 @@ internal class MetalQuintessence : QuintessentialMod, IDataMod {
        QApi.AddAtomType(Instance, Chromium, "chromium");
        QApi.AddPuzzlePermission(Instance, ChromeDispersionPermission);
         QApi.AddPuzzlePermission(Instance, ChromificationPermission);
+        QApi.AddPuzzlePermission(Instance, BlossomPermission);
         MetalQuintessencePart.AddParts();
+        
+   
             
        
     }
+
+
     public override void LoadCompatContent() { }
     public override void FinaliseContent() { }
 
     public override void PostLoad() { }
 	public override void Unload() { }
 }
+

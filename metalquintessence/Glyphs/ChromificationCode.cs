@@ -23,6 +23,7 @@ namespace MetalQuintessence
 
         public static Texture quicksilverIcon = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/chromification/quicksilver_symbol");
         public static Texture bowl = Assets.textures.parts.calcinator_bowl;
+        public static Texture ringedBowl = Assets.textures.parts.bonder_ring;
 
         public static void ChromificationRender(Part part, Vector2 pos, SolutionEditorBase editor, PartRenderer renderer)
         {
@@ -51,6 +52,7 @@ namespace MetalQuintessence
 
         public static bool ChromificationOnCycle(Sim sim, Part part, PartSimState simState, GlyphRecipe recipe, bool isCycleStart)
         {
+            
             HexIndex[] inputHex = new HexIndex[]
                      {
 
@@ -65,6 +67,7 @@ namespace MetalQuintessence
             List<AtomReference> inputs = new List<AtomReference>();
             // Input are laid
             bool inputLaid = true;
+            
             foreach (HexIndex input in inputHex)
             {
                 if (sim.FindAtomRelative(part, input).GetOrDefault(out AtomReference atom))
@@ -83,7 +86,7 @@ namespace MetalQuintessence
             )
             {
 
-
+                
                 List<AtomType> input = new List<AtomType>();
 
                 AtomType quicksilver = silver.atomType;
@@ -112,6 +115,7 @@ namespace MetalQuintessence
                 if (quicksilver == AtomTypes.quicksilver && requirement) // if requirement is still true, and if the input are quicksilver
                 {
                     // playSound(sim, MetalQuintessenceSound.chromificationSound);
+                    
                     foreach (AtomReference atom in inputs) //remove each atom one by one
                     {
                         atom.molecule.RemoveAtom(atom.pos);

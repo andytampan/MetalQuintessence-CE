@@ -1,4 +1,5 @@
 ﻿
+
 using Quintessential;
 using System;
 using static Quintessential.PartCycleDelegate;
@@ -23,6 +24,12 @@ namespace MetalQuintessence
         public static Texture chromificationStroke = AssetLoaderHelper.LoadTexture("textures/select/andytampan/chromification_stroke");
 
         public static PartType Chromification;
+
+        public static Texture blossomGlow = AssetLoaderHelper.LoadTexture("textures/select/andytampan/disposal_glow");
+        public static Texture blossomStroke = AssetLoaderHelper.LoadTexture("textures/select/andytampan/disposal_stroke");
+        public static Texture blossomIcon = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/icons/blossom");
+        public static Texture blossomIconHover = AssetLoaderHelper.LoadTexture("textures/parts/andytampan/icons/blossom_hover");
+        public static PartType Blossom;
 
         public static void AddParts()
         {
@@ -91,6 +98,62 @@ namespace MetalQuintessence
             QApi.AddPartType(MetalQuintessence.Instance, Chromification, "chromification", ChromificationCode.ChromificationRender);
             QApi.BindGlyphCycle(Chromification, new(PartCycleExecutionType.Normal, ChromificationCode.ChromificationOnCycle));
             MetalQuintessence.Instance.AddRecipe(new(), Chromification.Id, Chromification.Id);
+
+
+            Blossom = new()
+            {
+                cost = 30, // Cost
+                isFullHexCover = true, // Is a glyph
+                glowTexture = blossomGlow, // Shadow/glow
+                strokeTexture = blossomStroke, // Stroke/outline
+                baseTexture = blossomIcon, // Panel icon
+                hoverTexture = blossomIconHover, // Hovered panel icon
+                glyphHexes = new HexIndex[]
+
+    {
+                BlossomCode.blossomBowl,
+                BlossomCode.blossomA,
+                BlossomCode.blossomB,
+                BlossomCode.blossomC,
+                BlossomCode.blossomD,
+                BlossomCode.blossomE,
+                BlossomCode.blossomF
+
+    },
+                permissionCategory = PuzzlePermissions.None,
+                CustomPermissionCheck = perms => perms.Contains(MetalQuintessence.Instance.GetIdentifier("Blossom")),
+            };
+
+            QApi.AddPartTypeToPanel(Blossom, false);
+            QApi.AddPartType(MetalQuintessence.Instance, Blossom, "blossom", BlossomCode.BlossomRender);
+            QApi.BindGlyphCycle(Blossom, new(PartCycleExecutionType.Normal, BlossomCode.BlossomOnCycle));
+            MetalQuintessence.Instance.AddRecipe(new(), Blossom.Id, Blossom.Id);
+
+
+            AtomType[] ChromiumWheel = new AtomType[]
+{
+                            AtomTypes.lead,
+                            AtomTypes.tin,
+                            AtomTypes.iron,
+                            AtomTypes.copper,
+                            AtomTypes.silver,
+                            AtomTypes.gold,
+                            AtomTypes.quicksilver
+
+};
+            API.AddBlossomRule(MetalQuintessence.Chromium, ChromiumWheel);
+
+            AtomType[] QuintessenceWheel = new AtomType[]
+            {
+                            AtomTypes.water,
+                            AtomTypes.salt,
+                            AtomTypes.earth,
+                            AtomTypes.fire,
+                            AtomTypes.salt,
+                            AtomTypes.air,
+                            AtomTypes.salt
+            };
+            API.AddBlossomRule(AtomTypes.quintessence, QuintessenceWheel);
         }
         
 
