@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MetalQuintessence
 {
@@ -105,12 +106,13 @@ namespace MetalQuintessence
                             AtomTypes.gold,
                 };
                 bool requirement = true; //assume requirement is true, then
-                foreach (var atom in metals.Zip(inputs, (a, r) => new { type = a, reference = r })) //this iterate each atomtype and reference as one.
+                foreach (AtomType atomType in metals) //this iterate each atomtype and reference as one.
                 {
-                    if (!metals.Contains(atom.type)) { requirement = false; break; }
-                    ; //iterate if each metal is contained in the inputlist
-                    if (atom.reference.inMultiAtomMolecule && atom.reference.isHeldByArm) { requirement = false; break; }
-                    ; //iterate if each atom are singular and dropped
+                    if (!inputs.Any(obj => obj.atomType == atomType & !obj.inMultiAtomMolecule & !obj.isHeldByArm))
+                    {
+                        requirement = false;
+                        break;
+                    }
                 }
                 if (quicksilver == AtomTypes.quicksilver && requirement) // if requirement is still true, and if the input are quicksilver
                 {
@@ -118,7 +120,9 @@ namespace MetalQuintessence
                     
                     foreach (AtomReference atom in inputs) //remove each atom one by one
                     {
+                        sim.solutionEditor.consumptionEffects.Add(new ConsumptionEffect(sim.solutionEditor, atom));
                         atom.molecule.RemoveAtom(atom.pos);
+                        
                         
                     }
                     silver.molecule.ReplaceAtom(MetalQuintessence.Chromium, silver.pos);

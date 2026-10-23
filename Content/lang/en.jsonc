@@ -15,11 +15,11 @@
       },
       "chromification": {
         "": "Glyph Of Chromification",
-        "description": "Glyph of Chromification allow the creation of Chromium with metals of each type and a quicksilver catalyst"
+        "description": "Glyph of Chromification allow the creation of Chromium with metals of each grade and a quicksilver catalyst"
       },
       "blossom": {
         "": "Glyph Of Blossom",
-        "description":  "Glyph of Blossom transmute a quintesential atom into their wheel counterpart"
+        "description":  "Glyph of Blossom transmute a quintessential atom like Quintessence and Chromium into their wheel counterpart"
       }
     },
     "permission_sections": "Metal Quintessence",
